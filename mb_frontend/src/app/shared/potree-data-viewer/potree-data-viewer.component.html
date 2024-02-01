@@ -1,0 +1,91 @@
+<div class="menu_bar">
+
+    <div class="d-flex flex-row">
+        <div class="p-3">
+            <h2>Data</h2>
+            <hr>
+            
+            <label for="lod_select">Processed Files</label>
+            <select id="lod_select" class="form-control mb-3" (change)="onLODFileChange($event)">
+                <option *ngFor="let f of fileLODNameList">{{f}}</option>
+            </select>
+
+
+            <button type="button" class="btn btn-outline-secondary mb-4 w-100" (click)="openFileUploadDialog()">Upload new file</button>
+            <label for="raw_select">Process File</label>
+
+            <select id="raw_select" class="form-control mb-3" (change)="onRawFileSelectChange($event)">
+                <option selected> </option>
+                <option *ngFor="let f of fileRawNameList">{{f}}</option>
+            </select>
+
+            <ng-container *ngIf="selectFileForProcessing !== '' ">
+                <ng-container *ngIf="!isFileProcessing">
+                    <hr>
+                    <h5>Upload Settings</h5>
+                    <button type="button" class="btn btn-outline-secondary mb-4 w-100" (click)="processFile()">Process</button>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="to_utm" checked>
+                        <label class="custom-control-label" for="customCheck1"> To UTM?</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="text" class="custom-control-input" id="sep" [defaultValue]="','">
+                        <label class="custom-control-label" for="customCheck2">Column Separator</label>
+                    </div>
+                    <hr>
+                </ng-container>
+                <mat-spinner *ngIf="isFileProcessing"></mat-spinner>
+            </ng-container>
+
+            <div style="color: black;" *ngFor="let fileConf of fileLoading">
+                <ng-container [ngSwitch]="fileConf.status">
+                    <span *ngSwitchCase="'ready'" class="st_success">
+                        {{fileConf.filename}}
+                    </span>
+                    <span *ngSwitchCase="'loading'" class="st_loading">
+                        {{fileConf.filename}}
+                        <mat-progress-bar mode="determinate" [value]="fileConf.percentage"></mat-progress-bar>
+                    </span>
+                    <span *ngSwitchCase="'error'" class="st_error">
+                        {{fileConf.filename}}
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+        <div class="p-3">
+            <h2>Scripts</h2>
+            <hr>
+
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" (change)="onScriptChange('stat_based')">
+                <label class="custom-control-label" for="customCheck1"> Outlier stat-based</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" (change)="onScriptChange('k_means')">
+                <label class="custom-control-label" for="customCheck1"> Outlier k-means</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" (change)="onScriptChange('ml')">
+                <label class="custom-control-label" for="customCheck1"> Outlier ML</label>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary mt-2 w-100" (click)="onExecutePressed()">Execute</button>
+        </div>
+        <div class="p-3">
+            <h2>Settings</h2>
+            <hr>
+            <div *ngIf="this.selectFileForProcessing !== ''" class="d-flex flex-column">
+                <div class="p-2">
+                    <a [href]="FILE_SERVER_URL+ this.selectFileForProcessing" class="btn btn-outline-secondary w-100" target="_blank">Download</a>
+                </div>
+                <div class="p-2">
+                    <button type="button" class="btn btn-outline-danger w-100" (click)="onFileDelete()">Delete</button>
+                </div>
+            </div>
+            <p *ngIf="!this.selectFileForProcessing">Please select a file under <strong>Process File</strong></p>
+
+        </div>
+    </div>
+</div>
+
+<canvas #rendererContainer></canvas>

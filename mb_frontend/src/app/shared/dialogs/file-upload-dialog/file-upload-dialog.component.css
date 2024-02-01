@@ -1,0 +1,16 @@
+.my-drop-zone {
+    border: dashed 3px lightgray;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
+  
+  .nv-file-over {
+    border: dashed 3px red;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }

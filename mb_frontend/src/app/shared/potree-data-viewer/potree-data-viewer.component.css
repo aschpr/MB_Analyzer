@@ -1,0 +1,12 @@
+.menu_bar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: fit-content;
+    background-color: #ececec;
+    z-index: 100;
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom-right-radius: 15px;
+}
